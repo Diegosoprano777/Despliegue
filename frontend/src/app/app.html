@@ -1,0 +1,24 @@
+<app-encabezado (logoClick)="seleccionarUsuario(null)"></app-encabezado>
+
+<main>
+  <ul id="usuarios">
+    @for (usuario of usuarios; track usuario.id) {
+      <li>
+        <app-usuario 
+          [usuario]="usuario" 
+          [seleccionado]="usuario.id === idUsuarioSeleccionado"
+          (seleccionar)="seleccionarUsuario($any($event))"> 
+          </app-usuario>
+      </li>
+    }
+  </ul>
+
+  @if (usuarioSeleccionado) {
+    <app-tareas 
+      [nombre]="usuarioSeleccionado.nombre" 
+      [idUsuario]="idParaTareas">
+    </app-tareas>
+  } @else {
+    <p id="fallback">Selecciona un usuario para ver sus tareas.</p>
+  }
+</main>

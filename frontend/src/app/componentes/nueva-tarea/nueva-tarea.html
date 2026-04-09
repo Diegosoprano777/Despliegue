@@ -1,0 +1,34 @@
+<div class="overlay" (click)="cerrar()">
+
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <h2>Nueva Tarea</h2>
+
+    <form>
+
+      <label>Titulo</label>
+      <input name="titulo" [(ngModel)]="titulo" required>
+
+      <label>Resumen</label>
+      <textarea name="resumen" [(ngModel)]="resumen"></textarea>
+
+      <label>Fecha</label>
+      <input type="date" name="fecha" [(ngModel)]="fecha" required>
+
+      <div class="acciones">
+
+        <button type="button" class="cancelar" (click)="cerrar()">
+          Cancelar
+        </button>
+       
+        <button type="button" class="crear" (click)="crearTarea()">
+          Crear
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

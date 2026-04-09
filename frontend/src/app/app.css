@@ -1,0 +1,22 @@
+main{
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+}
+
+/* lista usuarios */
+
+.usuarios{
+  list-style: none;
+  padding: 0;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* panel tareas */
+
+.panel-tareas{
+  flex: 1;
+}

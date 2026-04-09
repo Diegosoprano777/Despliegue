@@ -1,0 +1,8 @@
+<div 
+  class="usuario-card"
+  [class.activo]="seleccionado"
+  (click)="seleccionarUsuario()"
+>
+  <img [src]="'imagenes/' + usuario.imagen" [alt]="usuario.nombre">
+  <span>{{ usuario.nombre }}</span>
+</div>

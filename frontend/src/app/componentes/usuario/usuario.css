@@ -1,0 +1,28 @@
+.usuario-card{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  background:#2a153f;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.usuario-card:hover{
+  background:#3d1d5a;
+}
+
+.usuario-card img{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+}
+
+.activo{
+  background:#6b3fa0;
+  border:2px solid #c084fc;
+}
+.panel{
+  backdrop-filter: blur(6px);
+}

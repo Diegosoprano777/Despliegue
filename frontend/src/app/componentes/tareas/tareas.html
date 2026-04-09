@@ -1,0 +1,65 @@
+<section class="tareas">
+  <div class="panel">
+    <header class="panel-header">
+      <h2>Tareas de {{ nombre }}</h2>
+      <button *ngIf="isLoggedIn" class="btn-agregar" (click)="abrirFormulario()">
+        Agregar Tarea Nueva
+      </button>
+    </header>
+
+    <ul class="lista-tareas">
+      <ng-container *ngIf="cargando; else listasTareas">
+        <div class="skeleton-tarjeta"></div>
+        <div class="skeleton-tarjeta"></div>
+      </ng-container>
+
+      <ng-template #listasTareas>
+        @for (tarea of tareas; track tarea.id) {
+          <app-tarea
+            [tarea]="tarea"
+            [isEditable]="isLoggedIn"
+            (eliminar)="eliminarTarea($event)"
+            (editar)="iniciarEdicion($event)"
+            (completar)="marcarComoCompletada($event)">
+          </app-tarea>
+        } @empty {
+          <p class="empty-msg">No hay tareas para {{ nombre }}.</p>
+        }
+      </ng-template>
+    </ul>
+  </div>
+</section>
+
+@if (mostrarFormulario) {
+  <div class="overlay" (click)="cerrarFormulario()">
+    <app-nueva-tarea
+      [idUsuario]="idUsuario"
+      (click)="$event.stopPropagation()"
+      (cancelar)="cerrarFormulario()"
+      (tareaCreada)="cerrarFormulario(); recargarTareas()">
+    </app-nueva-tarea>
+  </div>
+}
+
+@if (editModalVisible) {
+  <div class="overlay" (click)="cerrarEdicion()">
+    <div class="modal-edit" (click)="$event.stopPropagation()">
+      <h2>Editar Tarea</h2>
+      <form>
+        <label>Titulo</label>
+        <input name="titulo" [(ngModel)]="editFormData.titulo" required>
+
+        <label>Resumen</label>
+        <textarea name="resumen" [(ngModel)]="editFormData.resumen"></textarea>
+
+        <label>Fecha Límite</label>
+        <input type="date" name="fecha" [(ngModel)]="editFormData.expira" required>
+
+        <div class="acciones">
+          <button type="button" class="cancelar" (click)="cerrarEdicion()">Cancelar</button>
+          <button type="button" class="crear" (click)="guardarEdicion()">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

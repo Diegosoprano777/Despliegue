@@ -1,0 +1,18 @@
+<div class="header-card">
+  <div class="logo-container" (click)="onLogoClick()" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+    <div class="icono">📋</div>
+    <h1>TAREA FACIL</h1>
+  </div>
+  <p>Administrador de Tareas ADSO</p>
+  <div class="auth-section" style="margin-top: 10px;">
+    <span *ngIf="!isLoggedIn" class="badge">👁️ Modo Lectura</span>
+    <span *ngIf="isLoggedIn" class="badge admin">👑 Modo Admin</span>
+    
+    <button *ngIf="!isLoggedIn" class="btn-header btn-login" (click)="mostrarLogin = true">🔑 Login Admin</button>
+    <button *ngIf="isLoggedIn" class="btn-header btn-admin" (click)="mostrarAdminPanel = true">⚙️ Admin</button>
+    <button *ngIf="isLoggedIn" class="btn-header btn-logout" (click)="handleLogout()">Cerrar Sesión</button>
+  </div>
+</div>
+
+<app-login *ngIf="mostrarLogin" (cerrar)="mostrarLogin = false"></app-login>
+<app-admin-panel *ngIf="mostrarAdminPanel" (cerrar)="mostrarAdminPanel = false"></app-admin-panel>

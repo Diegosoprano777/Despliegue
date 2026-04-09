@@ -1,0 +1,53 @@
+<app-tarjeta>
+  <div class="tarea-container" [class.completada]="tarea.completada">
+    
+    <header class="tarea-header">
+      <div class="titulo-wrapper">
+        <h3 class="titulo">{{ tarea.titulo }}</h3>
+        <span class="status-badge" *ngIf="tarea.completada">Completada</span>
+      </div>
+      <div class="fecha-limite">
+        <span class="icon">📅</span>
+        <span class="fecha">{{ tarea.expira | date:'mediumDate' }}</span>
+      </div>
+    </header>
+
+    <div class="tarea-body">
+      <p class="resumen">{{ tarea.resumen }}</p>
+    </div>
+
+    <footer class="tarea-actions" *ngIf="isEditable">
+      <div class="action-group main-actions">
+        <!-- BOTÓN TERMINAR -->
+        <button 
+          class="btn-action btn-complete" 
+          (click)="completarTarea(); $event.stopPropagation()"
+          [disabled]="tarea.completada"
+          [title]="tarea.completada ? 'Tarea completada' : 'Marcar como completada'">
+          <span class="icon">{{ tarea.completada ? '✓' : '○' }}</span>
+          <span class="label">{{ tarea.completada ? 'Hecho' : 'Terminar' }}</span>
+        </button>
+
+        <!-- BOTÓN EDITAR -->
+        <button 
+          class="btn-action btn-edit" 
+          (click)="editarTarea(); $event.stopPropagation()"
+          title="Editar tarea">
+          <span class="icon">✎</span>
+          <span class="label">Editar</span>
+        </button>
+      </div>
+
+      <div class="action-group danger-actions">
+        <!-- BOTÓN ELIMINAR -->
+        <button 
+          class="btn-action btn-delete" 
+          (click)="eliminarTarea(); $event.stopPropagation()"
+          title="Eliminar tarea">
+          <span class="icon">🗑</span>
+        </button>
+      </div>
+    </footer>
+
+  </div>
+</app-tarjeta>

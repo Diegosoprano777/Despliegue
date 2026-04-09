@@ -1,0 +1,130 @@
+/* contenedor general */
+.tareas {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+/* panel principal */
+.panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  padding: 30px;
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+}
+
+/* header del panel */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* botón agregar */
+.btn-agregar {
+  background: var(--primary);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  color: white;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.3);
+}
+
+.btn-agregar:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
+}
+
+/* lista tareas */
+.lista-tareas {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Skeletons */
+.skeleton-tarjeta {
+  height: 140px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.2; }
+}
+
+/* Modal Edit styles */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 5, 25, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-edit {
+  background: rgba(45, 27, 78, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 16px;
+  width: 420px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  color: white;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  animation: slideUp 0.3s ease;
+}
+
+.modal-edit h2 { margin-top: 0; }
+.modal-edit form { display: flex; flex-direction: column; gap: 12px; }
+.modal-edit label { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8); }
+.modal-edit input, .modal-edit textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+.modal-edit textarea { height: 100px; resize: none; }
+.modal-edit input:focus, .modal-edit textarea:focus { outline: 1px solid #a855f7; }
+
+.acciones { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; }
+.cancelar { background: rgba(255,255,255,0.1); border: none; padding: 10px 16px; color: white; border-radius: 8px; cursor: pointer; }
+.crear { background: linear-gradient(135deg, #a855f7, #6366f1); border: none; padding: 10px 16px; color: white; border-radius: 8px; cursor: pointer; }
+.crear:hover { opacity: 0.9; }
+
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

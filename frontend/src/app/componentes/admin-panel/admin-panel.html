@@ -1,0 +1,67 @@
+<div class="overlay" (click)="cerrar.emit()">
+  <div class="admin-card" (click)="$event.stopPropagation()">
+    <header class="admin-header">
+      <h2>Panel de Administración</h2>
+      <button class="btn-close" (click)="cerrar.emit()">✖</button>
+    </header>
+
+    <div class="tabs">
+      <button 
+        [class.active]="pestanaActiva === 'crear'" 
+        (click)="cambiarPestana('crear')">
+        ➕ Nuevo Admin
+      </button>
+      <button 
+        [class.active]="pestanaActiva === 'editar'" 
+        (click)="cambiarPestana('editar')">
+        ⚙️ Editar Perfil
+      </button>
+    </div>
+
+    <!-- Pestaña Crear Administrador -->
+    <div class="tab-content" *ngIf="pestanaActiva === 'crear'">
+      <p class="desc">Registra un nuevo colega con privilegios administrativos.</p>
+
+      <div class="mensaje-container">
+        <p class="error" *ngIf="error">{{ error }}</p>
+        <p class="success" *ngIf="mensaje">{{ mensaje }}</p>
+      </div>
+
+      <form (submit)="$event.preventDefault()">
+        <div class="form-group">
+          <label>Nombre de Usuario</label>
+          <input type="text" [(ngModel)]="nuevoAdmin.username" name="newUsername" placeholder="Ej: julia_admin" (input)="error = ''" required>
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" [(ngModel)]="nuevoAdmin.password" name="newPassword" placeholder="••••••••" (input)="error = ''" required>
+        </div>
+        
+        <button type="button" class="btn-action" [disabled]="cargando" (click)="crearAdministrador()">Registrar Colega</button>
+      </form>
+    </div>
+
+    <!-- Pestaña Editar Perfil -->
+    <div class="tab-content" *ngIf="pestanaActiva === 'editar'">
+      <p class="desc">Modifica tu propio usuario y contraseña de ingreso.</p>
+
+      <div class="mensaje-container">
+        <p class="error" *ngIf="error">{{ error }}</p>
+        <p class="success" *ngIf="mensaje">{{ mensaje }}</p>
+      </div>
+
+      <form (submit)="$event.preventDefault()">
+        <div class="form-group">
+          <label>Nuevo Usuario</label>
+          <input type="text" [(ngModel)]="editarAdmin.username" name="editUsername" placeholder="Nuevo usuario" (input)="error = ''" required>
+        </div>
+        <div class="form-group">
+          <label>Nueva Contraseña</label>
+          <input type="password" [(ngModel)]="editarAdmin.password" name="editPassword" placeholder="••••••••" (input)="error = ''" required>
+        </div>
+ 
+        <button type="button" class="btn-action" [disabled]="cargando" (click)="actualizarPerfil()">Guardar Cambios</button>
+      </form>
+    </div>
+  </div>
+</div>
