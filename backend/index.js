@@ -24,14 +24,15 @@ app.use(express.json()); // permite recibir JSON
 // ========================================
 //  CONEXIÓN MYSQL
 // ========================================
-const db = mysql.createConnection({
+const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL || {
   host: process.env.MYSQLHOST || process.env.MYSQL_HOST || 'localhost',
   user: process.env.MYSQLUSER || process.env.MYSQL_USER || 'root',
   password: process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || '',
   database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || 'tareas_db2',
   port: process.env.MYSQLPORT || process.env.MYSQL_PORT || 3306,
   charset: 'utf8mb4'
-});
+};
+const db = mysql.createConnection(dbConfig);
 
 // Inicialización de base de datos
 const initDB = async () => {
