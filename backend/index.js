@@ -10,9 +10,11 @@ const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecreto123';
 
 const allowedOrigins = [
-  'http://localhost:4200', // Local Angular
-  process.env.FRONTEND_URL // Production Angular (on Vercel)
+  'http://localhost:4200',
+  process.env.FRONTEND_URL
 ].filter(Boolean);
+
+console.log('🌐 Allowed CORS Origins:', allowedOrigins);
 
 app.use(cors({
   origin: allowedOrigins,
@@ -32,7 +34,14 @@ const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL || {
   port: process.env.MYSQLPORT || process.env.MYSQL_PORT || 3306,
   charset: 'utf8mb4'
 };
-const db = mysql.createConnection(dbConfig);
+const db = mysql.createPool(typeof dbConfig === 'string' ? dbConfig : {
+  ...dbConfig,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+
+console.log('📡 Database configuration initialized (Pool Mode)');
 
 // Inicialización de base de datos
 const initDB = async () => {
@@ -40,7 +49,7 @@ const initDB = async () => {
     // Probar conexión
     const promisePool = db.promise();
     await promisePool.query('SELECT 1');
-    console.log('✅ Conectado a MySQL (Pool)');
+    console.log('✅ Conectado a MySQL exitosamente.');
 
     // Auto-Seeding Administradores
     await promisePool.query(`
@@ -103,7 +112,10 @@ app.post('/api/login', (req, res) => {
   }
 
   db.query('SELECT * FROM administradores WHERE username = ?', [username], async (err, results) => {
-    if (err) return res.status(500).json(err);
+    if (err) {
+      console.error('❌ Error de DB en login:', err);
+      return res.status(500).json({ mensaje: 'Error de base de datos', detalle: err.message });
+    }
     if (results.length === 0) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
 
     const admin = results[0];

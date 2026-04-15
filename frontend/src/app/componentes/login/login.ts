@@ -28,7 +28,8 @@ export class LoginComponent {
       },
       error: (e) => {
         console.error('❌ Error de servidor: ', e);
-        this.error = 'Credenciales inválidas o no hay conexión db';
+        const serverMsg = e.error?.mensaje || e.error?.message;
+        this.error = serverMsg || 'Error de conexión con el servidor';
         this.cd.detectChanges();
       }
     });
