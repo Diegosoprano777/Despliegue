@@ -19,6 +19,8 @@ export class AdminPanelComponent {
   nuevoAdmin = { username: '', password: '' };
   editarAdmin = { username: '', password: '' };
   administradores: any[] = [];
+  adminEditandoClave: number | null = null;
+  nuevaClaveAdmin: string = '';
 
   mensaje = '';
   error = '';
@@ -36,6 +38,8 @@ export class AdminPanelComponent {
     this.cargando = false;
     this.nuevoAdmin = { username: '', password: '' };
     this.editarAdmin = { username: '', password: '' };
+    this.adminEditandoClave = null;
+    this.nuevaClaveAdmin = '';
     
     if (pestana === 'gestionar') {
       this.cargarAdministradores();
@@ -75,6 +79,42 @@ export class AdminPanelComponent {
       },
       error: (err) => {
         this.error = err.error?.mensaje || 'Error al eliminar.';
+        this.cargando = false;
+        this.cd.detectChanges();
+      }
+    });
+  }
+
+  iniciarEdicionClave(id: number) {
+    this.adminEditandoClave = id;
+    this.nuevaClaveAdmin = '';
+    this.cd.detectChanges();
+  }
+
+  cancelarEdicionClave() {
+    this.adminEditandoClave = null;
+    this.nuevaClaveAdmin = '';
+    this.cd.detectChanges();
+  }
+
+  guardarNuevaClave(id: number) {
+    if (!this.nuevaClaveAdmin) {
+      this.error = 'Ingrese la nueva contraseña.';
+      return;
+    }
+    this.cargando = true;
+    this.cd.detectChanges();
+    this.authService.cambiarPasswordAdmin(id, this.nuevaClaveAdmin).subscribe({
+      next: () => {
+        this.mensaje = 'Contraseña actualizada con éxito.';
+        this.error = '';
+        this.cancelarEdicionClave();
+        this.cargando = false;
+        this.cd.detectChanges();
+      },
+      error: (err) => {
+        this.error = err.error?.mensaje || 'Error al actualizar contraseña.';
+        this.mensaje = '';
         this.cargando = false;
         this.cd.detectChanges();
       }

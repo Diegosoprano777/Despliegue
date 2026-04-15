@@ -79,9 +79,21 @@
       </div>
 
       <ul class="admin-list" *ngIf="!cargando && administradores.length > 0">
-        <li *ngFor="let admin of administradores">
-          <span class="admin-name">{{ admin.username }}</span>
-          <button class="btn-delete" (click)="borrarAdministrador(admin.id, admin.username)">Borrar</button>
+        <li *ngFor="let admin of administradores" [class.editing]="adminEditandoClave === admin.id">
+          <div class="admin-info">
+            <span class="admin-name">{{ admin.username }}</span>
+            <div class="admin-actions" *ngIf="adminEditandoClave !== admin.id">
+              <button class="btn-key" (click)="iniciarEdicionClave(admin.id)">Clave 🔑</button>
+              <button class="btn-delete" (click)="borrarAdministrador(admin.id, admin.username)">Borrar</button>
+            </div>
+          </div>
+          <div class="admin-edit-clave" *ngIf="adminEditandoClave === admin.id">
+            <input type="password" [(ngModel)]="nuevaClaveAdmin" placeholder="Nueva clave" (input)="error = ''" required>
+            <div class="edit-actions">
+              <button class="btn-cancel-edit" (click)="cancelarEdicionClave()">✖</button>
+              <button class="btn-save-edit" (click)="guardarNuevaClave(admin.id)">Guardar</button>
+            </div>
+          </div>
         </li>
       </ul>
       <p *ngIf="cargando" style="text-align: center; color: var(--primary); font-family: var(--font-display);">CARGANDO...</p>

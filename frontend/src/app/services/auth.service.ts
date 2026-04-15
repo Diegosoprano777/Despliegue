@@ -50,6 +50,10 @@ export class AuthService {
     return this.http.delete(`${this.apiUrl}/admin/${id}`);
   }
 
+  cambiarPasswordAdmin(id: number, nuevaPassword: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/admin/${id}/password`, { nuevaPassword });
+  }
+
   notificarCambioAdmins() {
     this.adminsActualizados.next();
   }
