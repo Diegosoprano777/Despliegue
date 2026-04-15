@@ -92,8 +92,8 @@
 }
 
 .modal-edit {
-  background: rgba(45, 27, 78, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 15, 30, 0.95);
+  border: 1px solid var(--glass-border);
   padding: 30px;
   border-radius: 16px;
   width: 420px;
@@ -102,7 +102,7 @@
   flex-direction: column;
   gap: 15px;
   color: white;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  box-shadow: var(--shadow-glow);
   animation: slideUp 0.3s ease;
 }
 
@@ -120,11 +120,11 @@
   font-family: inherit;
 }
 .modal-edit textarea { height: 100px; resize: none; }
-.modal-edit input:focus, .modal-edit textarea:focus { outline: 1px solid #a855f7; }
+.modal-edit input:focus, .modal-edit textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); background: rgba(0, 243, 255, 0.05); }
 
 .acciones { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; }
 .cancelar { background: rgba(255,255,255,0.1); border: none; padding: 10px 16px; color: white; border-radius: 8px; cursor: pointer; }
-.crear { background: linear-gradient(135deg, #a855f7, #6366f1); border: none; padding: 10px 16px; color: white; border-radius: 8px; cursor: pointer; }
-.crear:hover { opacity: 0.9; }
+.crear { background: linear-gradient(135deg, var(--primary), #0055ff); border: none; padding: 10px 16px; color: #000; border-radius: 8px; cursor: pointer; font-family: var(--font-display); font-weight: 700; box-shadow: 0 0 10px rgba(0, 243, 255, 0.4); transition: all 0.2s ease; }
+.crear:hover { box-shadow: var(--shadow-glow); transform: translateY(-2px); }
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

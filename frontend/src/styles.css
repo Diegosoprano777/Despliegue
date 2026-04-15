@@ -1,30 +1,59 @@
 :root {
-  --primary: #8b5cf6;
-  --primary-hover: #7c3aed;
-  --secondary: #64748b;
-  --accent: #f59e0b;
-  --danger: #ef4444;
-  --success: #10b981;
-  --bg-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --primary: #00f3ff;
+  --primary-hover: #00c3cc;
+  --secondary: #2a2a35;
+  --accent: #ff0055;
+  --danger: #ff2a2a;
+  --success: #00ff88;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #0f172a 0%, #020204 100%);
+  --glass-bg: rgba(0, 243, 255, 0.03);
+  --glass-border: rgba(0, 243, 255, 0.3);
+  --text-main: #e0f8ff;
+  --text-muted: #5bb3cc;
+  --shadow-lg: 0 0 20px rgba(0, 243, 255, 0.15), inset 0 0 10px rgba(0, 243, 255, 0.05);
+  --shadow-glow: 0 0 15px rgba(0, 243, 255, 0.4), 0 0 30px rgba(0, 243, 255, 0.2);
+  --font-display: 'Orbitron', 'Outfit', sans-serif;
+  --font-body: 'Rajdhani', 'Outfit', sans-serif;
 }
 
 body {
   margin: 0;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-body);
   background: var(--bg-gradient);
+  background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Cyber grid background */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    linear-gradient(rgba(0, 243, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 243, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+  pointer-events: none;
+  animation: gridMove 20s linear infinite;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
 }
 
 main{
   display:flex;
   gap:20px;
   padding:20px;
+  position: relative;
+  z-index: 1;
 }
 
 #usuarios{
@@ -36,4 +65,9 @@ main{
 
 #usuarios li{
   margin-bottom:10px;
+}
+
+@keyframes gridMove {
+  from { background-position: 0 0; }
+  to { background-position: 40px 40px; }
 }
