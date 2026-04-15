@@ -16,6 +16,11 @@
         (click)="cambiarPestana('editar')">
         ⚙️ Editar Perfil
       </button>
+      <button 
+        [class.active]="pestanaActiva === 'gestionar'" 
+        (click)="cambiarPestana('gestionar')">
+        🗑️ Gestionar
+      </button>
     </div>
 
     <!-- Pestaña Crear Administrador -->
@@ -62,6 +67,24 @@
  
         <button type="button" class="btn-action" [disabled]="cargando" (click)="actualizarPerfil()">Guardar Cambios</button>
       </form>
+    </div>
+
+    <!-- Pestaña Gestionar Colegas -->
+    <div class="tab-content" *ngIf="pestanaActiva === 'gestionar'">
+      <p class="desc">Elimina acceso y tareas de un colega. Esta acción es <strong>irreversible</strong>.</p>
+
+      <div class="mensaje-container">
+        <p class="error" *ngIf="error">{{ error }}</p>
+        <p class="success" *ngIf="mensaje">{{ mensaje }}</p>
+      </div>
+
+      <ul class="admin-list" *ngIf="!cargando && administradores.length > 0">
+        <li *ngFor="let admin of administradores">
+          <span class="admin-name">{{ admin.username }}</span>
+          <button class="btn-delete" (click)="borrarAdministrador(admin.id, admin.username)">Borrar</button>
+        </li>
+      </ul>
+      <p *ngIf="cargando" style="text-align: center; color: var(--primary); font-family: var(--font-display);">CARGANDO...</p>
     </div>
   </div>
 </div>

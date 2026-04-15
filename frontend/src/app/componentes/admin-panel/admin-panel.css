@@ -223,3 +223,58 @@
   from { opacity: 0; transform: translateY(25px) scale(0.95); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+.admin-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.admin-list::-webkit-scrollbar {
+  width: 6px;
+}
+.admin-list::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+.admin-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 243, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+
+.admin-name {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.btn-delete {
+  background: rgba(255, 42, 42, 0.1);
+  color: #ff2a2a;
+  border: 1px solid #ff2a2a;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+  background: #ff2a2a;
+  color: white;
+  box-shadow: 0 0 10px rgba(255, 42, 42, 0.5);
+  transform: scale(1.05);
+}

@@ -182,6 +182,21 @@ app.get('/api/administradores', (req, res) => {
   });
 });
 
+// Eliminar administrador y sus tareas (Protegido)
+app.delete('/api/admin/:id', validarToken, (req, res) => {
+  const { id } = req.params;
+  // Primero eliminamos las tareas asociadas a este usuario
+  db.query('DELETE FROM tareas WHERE idUsuario = ?', [id], (err) => {
+    if (err) return res.status(500).json({ mensaje: 'Error al limpiar tareas del usuario', error: err });
+    
+    // Luego eliminamos el administrador
+    db.query('DELETE FROM administradores WHERE id = ?', [id], (err2) => {
+      if (err2) return res.status(500).json({ mensaje: 'Error al eliminar administrador', error: err2 });
+      res.json({ mensaje: 'Administrador y sus tareas eliminados correctamente' });
+    });
+  });
+});
+
 // =========================
 // ENDPOINTS TAREAS
 // =========================

@@ -46,6 +46,10 @@ export class AuthService {
     return this.http.get<any[]>(`${this.apiUrl}/administradores`);
   }
 
+  eliminarAdmin(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/admin/${id}`);
+  }
+
   notificarCambioAdmins() {
     this.adminsActualizados.next();
   }
