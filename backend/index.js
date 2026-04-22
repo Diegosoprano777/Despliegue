@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 
 const app = express();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecreto123';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const allowedOrigins = [
   'http://localhost:4200',
@@ -27,11 +27,11 @@ app.use(express.json()); // permite recibir JSON
 //  CONEXIÓN MYSQL
 // ========================================
 const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL || {
-  host: process.env.MYSQLHOST || process.env.MYSQL_HOST || 'localhost',
-  user: process.env.MYSQLUSER || process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || '',
-  database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || 'tareas_db2',
-  port: process.env.MYSQLPORT || process.env.MYSQL_PORT || 3306,
+  host: process.env.MYSQLHOST || process.env.MYSQL_HOST,
+  user: process.env.MYSQLUSER || process.env.MYSQL_USER,
+  password: process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE,
+  port: process.env.MYSQLPORT || process.env.MYSQL_PORT,
   charset: 'utf8mb4'
 };
 const db = mysql.createPool(typeof dbConfig === 'string' ? dbConfig : {
