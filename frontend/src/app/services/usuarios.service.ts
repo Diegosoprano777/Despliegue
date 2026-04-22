@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface UsuarioBackend {
@@ -33,21 +33,21 @@ export class UsuariosService {
   // Crear usuario
   crearUsuario(nombre: string, imagen: string) {
     return this.http.post<{id: number, mensaje: string}>(this.apiUrl, { nombre, imagen }).pipe(
-      tap(() => this.cargarUsuarios().subscribe()) // Recargar tras crear
+      switchMap(() => this.cargarUsuarios()) // Recargar tras crear
     );
   }
 
   // Editar usuario
   editarUsuario(id: number, nombre: string, imagen: string) {
     return this.http.put(`${this.apiUrl}/${id}`, { nombre, imagen }).pipe(
-      tap(() => this.cargarUsuarios().subscribe()) // Recargar tras editar
+      switchMap(() => this.cargarUsuarios()) // Recargar tras editar
     );
   }
 
   // Eliminar usuario
   eliminarUsuario(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`).pipe(
-      tap(() => this.cargarUsuarios().subscribe()) // Recargar tras eliminar
+      switchMap(() => this.cargarUsuarios()) // Recargar tras eliminar
     );
   }
 }

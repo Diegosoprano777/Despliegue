@@ -20,6 +20,7 @@ export class TareaComponent {
 
   // 🔥 NUEVO
   @Output() completar = new EventEmitter<string>();
+  @Output() reabrir = new EventEmitter<string>();
 
   eliminarTarea() {
     if (!this.tarea || !this.tarea.id) {
@@ -42,6 +43,11 @@ export class TareaComponent {
     console.log('✅ Completando tarea:', this.tarea.id);
 
     this.completar.emit(this.tarea.id);
+  }
+
+  reabrirTarea() {
+    if (!this.tarea || !this.tarea.id) return;
+    this.reabrir.emit(this.tarea.id);
   }
 
   editarTarea() {

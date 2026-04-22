@@ -29,7 +29,7 @@ export class AdminPanelComponent {
 
   // Formularios de usuarios
   nuevoUsuario = { nombre: '', imagen: 'default-user.jpg' };
-  usuariosObj: UsuarioBackend[] = [];
+  get usuariosObj() { return this.usuariosService.usuarios(); }
   usuarioEditando: number | null = null;
   editarUsuarioDatos = { nombre: '', imagen: '' };
 
@@ -58,9 +58,7 @@ export class AdminPanelComponent {
     }
     
     // Obtener los usuarios si vamos a gestionar usuarios
-    if (pestana === 'gestionar-usuarios') {
-        this.usuariosObj = this.usuariosService.usuarios();
-    }
+    // Ya no es necesario instanciar porque `usuariosObj` es un getter reactivo
     
     this.cd.detectChanges();
   }
@@ -249,7 +247,6 @@ export class AdminPanelComponent {
           this.mensaje = 'Actualizado con éxito.';
           this.usuarioEditando = null;
           this.cargando = false;
-          this.usuariosObj = this.usuariosService.usuarios();
         },
         error: () => {
           this.error = 'Error actualizando usuario.';
@@ -265,7 +262,6 @@ export class AdminPanelComponent {
       next: () => {
         this.mensaje = 'Usuario eliminado.';
         this.cargando = false;
-        this.usuariosObj = this.usuariosService.usuarios();
       },
       error: () => {
         this.error = 'Error al eliminar usuario.';

@@ -73,12 +73,22 @@ export class TareasComponent implements OnInit, OnChanges {
   }
 
   marcarComoCompletada(idTarea: string) {
-    this.tareasService.marcarComoCompletada(idTarea).subscribe({
+    this.tareasService.marcarComoCompletada(idTarea, true).subscribe({
       next: () => {
         console.log('Tarea terminada en el servidor');
         this.recargarTareas(); // Esto ya tiene el detectChanges adentro
       },
       error: (err) => console.error('Error al terminar tarea:', err)
+    });
+  }
+
+  reabrirTarea(idTarea: string) {
+    this.tareasService.marcarComoCompletada(idTarea, false).subscribe({
+      next: () => {
+        console.log('Tarea reabierta en el servidor');
+        this.recargarTareas();
+      },
+      error: (err) => console.error('Error al reabrir tarea:', err)
     });
   }
 

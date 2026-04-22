@@ -292,11 +292,13 @@ app.post('/tareas', validarToken, (req, res) => {
 // PROTEGIDA: Completar tarea
 app.patch('/tareas/:id', validarToken, (req, res) => {
   const { id } = req.params;
-  const sql = 'UPDATE tareas SET completada = 1 WHERE id = ?';
+  const { completada } = req.body;
+  const estado = completada ? 1 : 0;
+  const sql = 'UPDATE tareas SET completada = ? WHERE id = ?';
 
-  db.query(sql, [id], (err, result) => {
+  db.query(sql, [estado, id], (err, result) => {
     if (err) return res.status(500).json(err);
-    res.json({ mensaje: 'Tarea completada' });
+    res.json({ mensaje: `Tarea ${estado ? 'completada' : 'reabierta'}` });
   });
 });
 

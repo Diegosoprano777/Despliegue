@@ -25,10 +25,10 @@ export class TareasService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  // ✅ Este método es el que usará el botón "Terminar"
-  marcarComoCompletada(id: string): Observable<Tarea> {
+  // ✅ Este método es el que usará el botón "Terminar / Reabrir"
+  marcarComoCompletada(id: string, completada: boolean = true): Observable<Tarea> {
     return this.http.patch<Tarea>(`${this.apiUrl}/${id}`, {
-      completada: true
+      completada
     });
   }
 

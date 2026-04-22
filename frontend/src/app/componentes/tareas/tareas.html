@@ -20,7 +20,8 @@
             [isEditable]="isLoggedIn"
             (eliminar)="eliminarTarea($event)"
             (editar)="iniciarEdicion($event)"
-            (completar)="marcarComoCompletada($event)">
+            (completar)="marcarComoCompletada($event)"
+            (reabrir)="reabrirTarea($event)">
           </app-tarea>
         } @empty {
           <p class="empty-msg">No hay tareas para {{ nombre }}.</p>
