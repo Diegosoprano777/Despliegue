@@ -128,7 +128,7 @@
           <label>Selecciona un Avatar:</label>
           <div class="avatars-grid">
             <img *ngFor="let avatar of avatares" 
-                 [src]="avatar" 
+                 [src]="'imagenes/' + avatar" 
                  [class.selected]="nuevoUsuario.imagen === avatar" 
                  (click)="seleccionarAvatar(avatar)"
                  alt="Avatar">
@@ -151,7 +151,7 @@
       <ul class="admin-list" *ngIf="!cargando && usuariosObj">
         <li *ngFor="let u of usuariosObj" [class.editing]="usuarioEditando === u.id">
           <div class="admin-info">
-            <img [src]="u.imagen" alt="avatar" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 15px; border: 2px solid var(--primary); object-fit: cover;">
+            <img [src]="'imagenes/' + u.imagen" alt="avatar" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 15px; border: 2px solid var(--primary); object-fit: cover;">
             <span class="admin-name">{{ u.nombre }}</span>
             <div class="admin-actions" *ngIf="usuarioEditando !== u.id">
               <button class="btn-key" (click)="iniciarEdicionUsuario(u)">Editar ✏️</button>
@@ -163,7 +163,7 @@
             <input type="text" [(ngModel)]="editarUsuarioDatos.nombre" placeholder="Nuevo nombre" style="margin-bottom: 10px;">
             <div class="avatars-grid" style="margin-bottom: 15px; display: flex; gap: 5px;">
               <img *ngFor="let avatar of avatares" 
-                   [src]="avatar" 
+                   [src]="'imagenes/' + avatar" 
                    [class.selected]="editarUsuarioDatos.imagen === avatar" 
                    (click)="seleccionarAvatar(avatar)"
                    style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; border: 2px solid transparent; transition: all 0.2s; object-fit: cover;"
