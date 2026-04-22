@@ -67,6 +67,15 @@ const initDB = async () => {
       console.log('✅ Seeding: Administrador por defecto (admin) creado exitosamente.');
     }
 
+    // Crear tabla usuarios si no existe
+    await promisePool.query(`
+      CREATE TABLE IF NOT EXISTS usuarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(255) NOT NULL,
+        imagen VARCHAR(255) DEFAULT 'default-user.jpg'
+      )
+    `);
+
     // Asegurarnos de que tareas existe
     await promisePool.query(`
       CREATE TABLE IF NOT EXISTS tareas (
@@ -75,7 +84,8 @@ const initDB = async () => {
         resumen TEXT,
         expira DATE,
         idUsuario INT,
-        completada TINYINT(1) DEFAULT 0
+        completada TINYINT(1) DEFAULT 0,
+        FOREIGN KEY (idUsuario) REFERENCES usuarios(id) ON DELETE CASCADE
       )
     `);
   } catch (err) {
@@ -211,6 +221,48 @@ app.put('/api/admin/:id/password', validarToken, async (req, res) => {
   } catch (error) {
     res.status(500).json({ mensaje: 'Error del servidor' });
   }
+});
+
+// =========================
+// ENDPOINTS USUARIOS (Gestión)
+// =========================
+
+app.get('/api/usuarios', (req, res) => {
+  db.query('SELECT * FROM usuarios', (err, results) => {
+    if (err) return res.status(500).json(err);
+    res.json(results);
+  });
+});
+
+app.post('/api/usuarios', validarToken, (req, res) => {
+  const { nombre, imagen } = req.body;
+  if (!nombre) return res.status(400).json({ mensaje: 'Falta el nombre' });
+  const img = imagen || 'default-user.jpg';
+  
+  db.query('INSERT INTO usuarios (nombre, imagen) VALUES (?, ?)', [nombre, img], (err, result) => {
+    if (err) return res.status(500).json(err);
+    res.json({ id: result.insertId, mensaje: 'Usuario creado exitosamente' });
+  });
+});
+
+app.put('/api/usuarios/:id', validarToken, (req, res) => {
+  const { id } = req.params;
+  const { nombre, imagen } = req.body;
+  if (!nombre || !imagen) return res.status(400).json({ mensaje: 'Datos incompletos' });
+
+  db.query('UPDATE usuarios SET nombre = ?, imagen = ? WHERE id = ?', [nombre, imagen, id], (err) => {
+    if (err) return res.status(500).json({ mensaje: 'Error al actualizar usuario', error: err });
+    res.json({ mensaje: 'Usuario actualizado correctamente' });
+  });
+});
+
+app.delete('/api/usuarios/:id', validarToken, (req, res) => {
+  const { id } = req.params;
+  // Gracias al ON DELETE CASCADE de la tabla, las tareas se eliminarán solas
+  db.query('DELETE FROM usuarios WHERE id = ?', [id], (err) => {
+    if (err) return res.status(500).json({ mensaje: 'Error al eliminar usuario', error: err });
+    res.json({ mensaje: 'Usuario y sus tareas (cascada) eliminados' });
+  });
 });
 
 // =========================

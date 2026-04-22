@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { UsuariosService, UsuarioBackend } from '../../services/usuarios.service';
 
 @Component({
   selector: 'app-admin-panel',
@@ -13,7 +14,7 @@ import { AuthService } from '../../services/auth.service';
 export class AdminPanelComponent {
   @Output() cerrar = new EventEmitter<void>();
 
-  pestanaActiva: 'crear' | 'editar' | 'gestionar' = 'crear';
+  pestanaActiva: 'crear' | 'editar' | 'gestionar' | 'crear-usuario' | 'gestionar-usuarios' = 'crear';
 
   // Formularios
   nuevoAdmin = { username: '', password: '' };
@@ -26,12 +27,21 @@ export class AdminPanelComponent {
   error = '';
   cargando = false;
 
+  // Formularios de usuarios
+  nuevoUsuario = { nombre: '', imagen: 'default-user.jpg' };
+  usuariosObj: UsuarioBackend[] = [];
+  usuarioEditando: number | null = null;
+  editarUsuarioDatos = { nombre: '', imagen: '' };
+
+  avatares = ['ana.jpg', 'carlos.jpg', 'fernanda.jpg', 'fabian.jpg', 'laura.jpg', 'miguel.jpg'];
+
   constructor(
     private authService: AuthService,
+    private usuariosService: UsuariosService,
     private cd: ChangeDetectorRef
   ) {}
 
-  cambiarPestana(pestana: 'crear' | 'editar' | 'gestionar') {
+  cambiarPestana(pestana: 'crear' | 'editar' | 'gestionar' | 'crear-usuario' | 'gestionar-usuarios') {
     this.pestanaActiva = pestana;
     this.mensaje = '';
     this.error = '';
@@ -41,8 +51,15 @@ export class AdminPanelComponent {
     this.adminEditandoClave = null;
     this.nuevaClaveAdmin = '';
     
+    this.usuarioEditando = null;
+    
     if (pestana === 'gestionar') {
       this.cargarAdministradores();
+    }
+    
+    // Obtener los usuarios si vamos a gestionar usuarios
+    if (pestana === 'gestionar-usuarios') {
+        this.usuariosObj = this.usuariosService.usuarios();
     }
     
     this.cd.detectChanges();
@@ -181,5 +198,79 @@ export class AdminPanelComponent {
           this.cd.detectChanges(); // ← Forzar actualización de la UI
         }
       });
+  }
+
+  // ============== MÉTODOS DE USUARIOS =================
+
+  seleccionarAvatar(avatar: string) {
+    if (this.pestanaActiva === 'crear-usuario') {
+      this.nuevoUsuario.imagen = avatar;
+    } else if (this.usuarioEditando) {
+      this.editarUsuarioDatos.imagen = avatar;
+    }
+  }
+
+  crearUsuarioBD() {
+    if (!this.nuevoUsuario.nombre) {
+      this.error = 'Ingrese un nombre.';
+      return;
+    }
+    this.cargando = true;
+    this.usuariosService.crearUsuario(this.nuevoUsuario.nombre, this.nuevoUsuario.imagen)
+      .subscribe({
+        next: () => {
+          this.mensaje = 'Usuario creado con éxito.';
+          this.nuevoUsuario = { nombre: '', imagen: 'default-user.jpg' };
+          this.error = '';
+          this.cargando = false;
+        },
+        error: (err) => {
+          this.error = 'Error creando usuario.';
+          this.cargando = false;
+        }
+      });
+  }
+
+  iniciarEdicionUsuario(u: UsuarioBackend) {
+    this.usuarioEditando = u.id;
+    this.editarUsuarioDatos = { nombre: u.nombre, imagen: u.imagen };
+  }
+
+  cancelarEdicionUsuario() {
+    this.usuarioEditando = null;
+  }
+
+  guardarEdicionUsuario(id: number) {
+    if (!this.editarUsuarioDatos.nombre) return;
+    this.cargando = true;
+    this.usuariosService.editarUsuario(id, this.editarUsuarioDatos.nombre, this.editarUsuarioDatos.imagen)
+      .subscribe({
+        next: () => {
+          this.mensaje = 'Actualizado con éxito.';
+          this.usuarioEditando = null;
+          this.cargando = false;
+          this.usuariosObj = this.usuariosService.usuarios();
+        },
+        error: () => {
+          this.error = 'Error actualizando usuario.';
+          this.cargando = false;
+        }
+      });
+  }
+
+  borrarUsuario(id: number, nombre: string) {
+    if (!confirm(`¿Eliminar al usuario "${nombre}" y todas sus tareas permanentemente?`)) return;
+    this.cargando = true;
+    this.usuariosService.eliminarUsuario(id).subscribe({
+      next: () => {
+        this.mensaje = 'Usuario eliminado.';
+        this.cargando = false;
+        this.usuariosObj = this.usuariosService.usuarios();
+      },
+      error: () => {
+        this.error = 'Error al eliminar usuario.';
+        this.cargando = false;
+      }
+    });
   }
 }

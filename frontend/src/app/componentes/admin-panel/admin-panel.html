@@ -12,6 +12,11 @@
         ➕ Nuevo Admin
       </button>
       <button 
+        [class.active]="pestanaActiva === 'crear-usuario'" 
+        (click)="cambiarPestana('crear-usuario')">
+        👤 Nuevo Usuario
+      </button>
+      <button 
         [class.active]="pestanaActiva === 'editar'" 
         (click)="cambiarPestana('editar')">
         ⚙️ Editar Perfil
@@ -19,7 +24,12 @@
       <button 
         [class.active]="pestanaActiva === 'gestionar'" 
         (click)="cambiarPestana('gestionar')">
-        🗑️ Gestionar
+        🗑️ Admins
+      </button>
+      <button 
+        [class.active]="pestanaActiva === 'gestionar-usuarios'" 
+        (click)="cambiarPestana('gestionar-usuarios')">
+        👥 Usuarios
       </button>
     </div>
 
@@ -98,5 +108,77 @@
       </ul>
       <p *ngIf="cargando" style="text-align: center; color: var(--primary); font-family: var(--font-display);">CARGANDO...</p>
     </div>
+
+    <!-- Pestaña Crear Usuario -->
+    <div class="tab-content" *ngIf="pestanaActiva === 'crear-usuario'">
+      <p class="desc">Crea un usuario normal dueño de tareas.</p>
+
+      <div class="mensaje-container">
+        <p class="error" *ngIf="error">{{ error }}</p>
+        <p class="success" *ngIf="mensaje">{{ mensaje }}</p>
+      </div>
+
+      <form (submit)="$event.preventDefault()">
+        <div class="form-group">
+          <label>Nombre del Usuario</label>
+          <input type="text" [(ngModel)]="nuevoUsuario.nombre" name="nombreUsuario" placeholder="Ej: Ana" (input)="error = ''" required>
+        </div>
+        
+        <div class="form-group avatar-selection">
+          <label>Selecciona un Avatar:</label>
+          <div class="avatars-grid">
+            <img *ngFor="let avatar of avatares" 
+                 [src]="avatar" 
+                 [class.selected]="nuevoUsuario.imagen === avatar" 
+                 (click)="seleccionarAvatar(avatar)"
+                 alt="Avatar">
+          </div>
+        </div>
+        
+        <button type="button" class="btn-action" [disabled]="cargando" (click)="crearUsuarioBD()">Crear Usuario</button>
+      </form>
+    </div>
+
+    <!-- Pestaña Gestionar Usuarios -->
+    <div class="tab-content" *ngIf="pestanaActiva === 'gestionar-usuarios'">
+      <p class="desc">Configura usuarios y sus avatares. Al eliminar, se borran sus tareas.</p>
+
+      <div class="mensaje-container">
+        <p class="error" *ngIf="error">{{ error }}</p>
+        <p class="success" *ngIf="mensaje">{{ mensaje }}</p>
+      </div>
+
+      <ul class="admin-list" *ngIf="!cargando && usuariosObj">
+        <li *ngFor="let u of usuariosObj" [class.editing]="usuarioEditando === u.id">
+          <div class="admin-info">
+            <img [src]="u.imagen" alt="avatar" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 15px; border: 2px solid var(--primary); object-fit: cover;">
+            <span class="admin-name">{{ u.nombre }}</span>
+            <div class="admin-actions" *ngIf="usuarioEditando !== u.id">
+              <button class="btn-key" (click)="iniciarEdicionUsuario(u)">Editar ✏️</button>
+              <button class="btn-delete" (click)="borrarUsuario(u.id, u.nombre)">Borrar</button>
+            </div>
+          </div>
+          
+          <div class="admin-edit-clave" *ngIf="usuarioEditando === u.id">
+            <input type="text" [(ngModel)]="editarUsuarioDatos.nombre" placeholder="Nuevo nombre" style="margin-bottom: 10px;">
+            <div class="avatars-grid" style="margin-bottom: 15px; display: flex; gap: 5px;">
+              <img *ngFor="let avatar of avatares" 
+                   [src]="avatar" 
+                   [class.selected]="editarUsuarioDatos.imagen === avatar" 
+                   (click)="seleccionarAvatar(avatar)"
+                   style="cursor: pointer; width: 32px; height: 32px; border-radius: 50%; border: 2px solid transparent; transition: all 0.2s; object-fit: cover;"
+                   [style.borderColor]="editarUsuarioDatos.imagen === avatar ? '#00e5ff' : 'transparent'"
+                   alt="Avatar">
+            </div>
+            <div class="edit-actions">
+              <button class="btn-cancel-edit" (click)="cancelarEdicionUsuario()">✖</button>
+              <button class="btn-save-edit" (click)="guardarEdicionUsuario(u.id)">Guardar</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <p *ngIf="cargando" style="text-align: center; color: var(--primary); font-family: var(--font-display);">CARGANDO...</p>
+    </div>
+
   </div>
 </div>
