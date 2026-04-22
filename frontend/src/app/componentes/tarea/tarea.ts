@@ -30,7 +30,8 @@ export class TareaComponent {
 
     console.log('🗑 Eliminando tarea:', this.tarea.id);
 
-    this.eliminar.emit(this.tarea.id);
+    // Asegurar que el ID sea string (MySQL devuelve número a veces)
+    this.eliminar.emit(String(this.tarea.id));
   }
 
   // 🔥 NUEVO
@@ -42,12 +43,12 @@ export class TareaComponent {
 
     console.log('✅ Completando tarea:', this.tarea.id);
 
-    this.completar.emit(this.tarea.id);
+    this.completar.emit(String(this.tarea.id));
   }
 
   reabrirTarea() {
     if (!this.tarea || !this.tarea.id) return;
-    this.reabrir.emit(this.tarea.id);
+    this.reabrir.emit(String(this.tarea.id));
   }
 
   editarTarea() {
