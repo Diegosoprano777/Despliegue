@@ -8,10 +8,18 @@ const bcrypt = require('bcrypt');
 const app = express();
 
 const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error("🚨 ALERTA CRÍTICA: La variable JWT_SECRET no ha sido inyectada. El Login fallará en producción.");
+}
+
+const FRONTEND_URL = process.env.FRONTEND_URL;
+if (!FRONTEND_URL) {
+  console.error("⚠️ AVISO CORS: La variable FRONTEND_URL no está definida. Si intentas acceder desde Vercel/Producción, el servidor rechazará la conexión por CORS.");
+}
 
 const allowedOrigins = [
   'http://localhost:4200',
-  process.env.FRONTEND_URL
+  FRONTEND_URL
 ].filter(Boolean);
 
 console.log('🌐 Allowed CORS Origins:', allowedOrigins);
