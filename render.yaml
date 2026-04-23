@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: gestor-tareas-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: MYSQL_HOST
+        value: gateway01.us-east-1.prod.aws.tidbcloud.com
+      - key: MYSQL_PORT
+        value: 4000
+      - key: MYSQL_USER
+        value: xrTpTKFWJNERGdJ.root
+      - key: MYSQL_PASSWORD
+        sync: false
+      - key: MYSQL_DATABASE
+        value: test
+      - key: MYSQL_SSL
+        value: "true"
+      - key: MYSQL_CA_CERT
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false

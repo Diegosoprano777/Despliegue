@@ -4,6 +4,7 @@ const cors = require('cors');
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 
 const app = express();
 
@@ -42,12 +43,27 @@ const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL || {
   port: process.env.MYSQLPORT || process.env.MYSQL_PORT,
   charset: 'utf8mb4'
 };
-const db = mysql.createPool(typeof dbConfig === 'string' ? dbConfig : {
+
+if (typeof dbConfig === 'object' && process.env.MYSQL_SSL === 'true') {
+  dbConfig.ssl = { rejectUnauthorized: true };
+  if (process.env.MYSQL_CA_CERT) {
+    dbConfig.ssl.ca = process.env.MYSQL_CA_CERT;
+  } else if (process.env.MYSQL_CA_PATH) {
+    try {
+      dbConfig.ssl.ca = fs.readFileSync(process.env.MYSQL_CA_PATH).toString();
+    } catch (err) {
+      console.warn('⚠️ No se pudo leer el archivo de certificado SSL:', err.message);
+    }
+  }
+}
+
+const poolConfig = typeof dbConfig === 'string' ? dbConfig : {
   ...dbConfig,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
-});
+};
+const db = mysql.createPool(poolConfig);
 
 console.log('📡 Database configuration initialized (Pool Mode)');
 

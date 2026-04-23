@@ -1,6 +1,7 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 
 const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL || {
   host: process.env.MYSQLHOST || process.env.MYSQL_HOST,
@@ -10,6 +11,19 @@ const dbConfig = process.env.MYSQL_PUBLIC_URL || process.env.MYSQL_URL || {
   port: process.env.MYSQLPORT || process.env.MYSQL_PORT,
   charset: 'utf8mb4'
 };
+
+if (typeof dbConfig === 'object' && process.env.MYSQL_SSL === 'true') {
+  dbConfig.ssl = { rejectUnauthorized: true };
+  if (process.env.MYSQL_CA_CERT) {
+    dbConfig.ssl.ca = process.env.MYSQL_CA_CERT;
+  } else if (process.env.MYSQL_CA_PATH) {
+    try {
+      dbConfig.ssl.ca = fs.readFileSync(process.env.MYSQL_CA_PATH).toString();
+    } catch (err) {
+      console.warn('⚠️ No se pudo leer el archivo de certificado SSL:', err.message);
+    }
+  }
+}
 
 async function setup() {
   console.log('Iniciando configuración de la base de datos...');
