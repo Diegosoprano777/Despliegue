@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://mellow-joy-production-dd7e.up.railway.app'
+  apiUrl: 'https://gestor-tareas-backend-4nby.onrender.com'
 };
